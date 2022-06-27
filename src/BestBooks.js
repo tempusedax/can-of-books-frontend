@@ -1,5 +1,9 @@
 import axios from 'axios';
 import React from 'react';
+import Carousel from "react-bootstrap/Carousel";
+
+
+const REACT_APP_SERVER_URL = process.env.REACT_APP_SERVER_URL;
 
 
 class BestBooks extends React.Component {
@@ -26,7 +30,15 @@ class BestBooks extends React.Component {
   }
 
 componentDidMount() {
-  this.getBooks();
+  axios
+  // .get(`${REACT_APP_SERVER_URL}/books/${#authenticator}`)
+  .then((bookResponse) => {
+    this.setState({ books: bookResponse.data });
+    console.log(this.state.books);
+  })
+  .catch((error) => alert("the book collection is empty."));
+};
+
 }
 
 
