@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 
 class BestBooks extends React.Component {
   constructor(props) {
@@ -7,6 +8,26 @@ class BestBooks extends React.Component {
       books: []
     }
   }
+
+  getBooks = async () => {
+    try {
+      let results = await axios.get(`http://localhost:3001/books`);
+      this.setState({
+        books: results.data
+      })
+      console.log(results)
+    } catch(error) {
+      console.log('we have an error: ', error.response.data)
+    }
+    }
+
+    //when site loads- i say specific ocomponent loads and will be displayed
+    componentDidMount() {
+      this.getBooks();
+    }
+    
+
+  
 
   /* TODO: Make a GET request to your API to fetch all the books from the database  */
 
