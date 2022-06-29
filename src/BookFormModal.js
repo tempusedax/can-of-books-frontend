@@ -47,6 +47,9 @@ class BookFormModal extends React.Component {
                 <Form.Control name="title" type='bookTitle' placeholder='Book Title' />
                 <Form.Label>Book Description</Form.Label>
                 <Form.Control name="description" type='bookDescription' placeholder='Book Description' />
+                <Button variant="primary" type="submit">
+                  Add Book
+                </Button>
               </Form.Group>
             </Form>
           </Modal.Body>
