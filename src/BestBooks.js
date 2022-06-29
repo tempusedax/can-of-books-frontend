@@ -21,6 +21,23 @@ class BestBooks extends React.Component {
     }
     }
 
+    async deleteBook(id) {
+
+      try{
+        let url = `${process.env.REACT_APP_SERVER}/books/${id}`;
+        await axios.delete(url);
+        let updatedBooks = this.state.books.filter(book => book._id !== id);
+        this.setState({
+          books: updatedBooks,
+        })
+        console.log(this.state.books)
+      } catch (err) {
+        console.log(err, 'Error');
+      }
+    }
+
+    
+    
     //when site loads- i say specific ocomponent loads and will be displayed
     componentDidMount() {
       this.getBooks();
