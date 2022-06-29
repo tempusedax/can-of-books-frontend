@@ -6,7 +6,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import {
   BrowserRouter as Router,
   Routes,
-  Route
+  Route, 
 } from "react-router-dom";
 
 class App extends React.Component {
