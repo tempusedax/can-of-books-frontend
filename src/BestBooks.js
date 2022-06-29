@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
-import { Form, Button, ListGroup } from 'react-bootstrap';
+import BookFormModal from './BookFormModal';
+import { Form, Button, Container } from 'react-bootstrap';
 import Carousel from 'react-bootstrap/Carousel'
 
 class BestBooks extends React.Component {
@@ -22,7 +23,28 @@ class BestBooks extends React.Component {
       console.log('we have an error: ', error.response.data)
     }
   }
+  handleBookSubmit = (e) => {
+    e.preventDefault();
+    let newBook = {
+      title: e.target.title.value,
+      description: e.target.description.value,
+      id: e.target._id.value
+    }
+    this.postBooks(newBook)
+  }
 
+  postBooks = async (bookObj) => {
+    try {
+      let url = `${process.env.REACT_APP_SERVER}/books`;
+      let createdBook = await axios.post(url, bookObj);
+
+      this.setState({
+        books: [...this.state.books, createdBook.data]
+      });
+    } catch (error) {
+      console.log('we have an error: ', error.response.data);
+    }
+  }
   //when site loads- i say specific ocomponent loads and will be displayed
   componentDidMount() {
     this.getBooks();
@@ -38,6 +60,7 @@ class BestBooks extends React.Component {
     /* TODO: render all the books in a Carousel */
     let books = this.state.books.map((book, idx) => {
       return (
+
         <Carousel.Item key={idx}>
           <img
             className="d-block w-100"
@@ -50,6 +73,7 @@ class BestBooks extends React.Component {
             <p>{book.genre}</p>
           </Carousel.Caption>
         </Carousel.Item>
+        
       )
     })
 
@@ -58,9 +82,9 @@ class BestBooks extends React.Component {
         <h2>My Essential Lifelong Learning &amp; Formation Shelf</h2>
 
         {this.state.books.length ? (
-                    <Carousel>
-                    {books}
-                  </Carousel>
+          <Carousel>
+            {books}
+          </Carousel>
         ) : (
           <h3>No Books Found :(</h3>
         )}
