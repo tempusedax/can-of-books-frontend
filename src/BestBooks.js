@@ -8,7 +8,8 @@ class BestBooks extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      books: []
+      books: [],
+      showModal: false
     }
   }
 
@@ -22,28 +23,35 @@ class BestBooks extends React.Component {
     } catch (error) {
       console.log('we have an error: ', error.response.data)
     }
+    // console.log(this.state.books)
   }
-  handleBookSubmit = (e) => {
-    e.preventDefault();
-    let newBook = {
-      title: e.target.title.value,
-      description: e.target.description.value,
-      id: e.target._id.value
-    }
-    this.postBooks(newBook)
-  }
+ 
+  handleOnHide = () => {
+    this.setState({
+      showModal: false
+    });
+  };
+
+
+  handleOnShowModal = (book) => {
+    this.setState({
+      showModal: true,
+      selectedBook: book
+    });
+  };
 
   postBooks = async (bookObj) => {
     try {
       let url = `${process.env.REACT_APP_SERVER}/books`;
-      let createdBook = await axios.post(url, bookObj);
-
+      let createdBook = await axios.post(url, bookObj);;
       this.setState({
-        books: [...this.state.books, createdBook.data]
+        books: [...this.state.books, createdBook.data],
+        showModal: false
       });
     } catch (error) {
       console.log('we have an error: ', error.response.data);
     }
+    console.log(this.state.books);
   }
   //when site loads- i say specific ocomponent loads and will be displayed
   componentDidMount() {
@@ -61,7 +69,6 @@ class BestBooks extends React.Component {
         this.setState({
           books: updatedBooks,
         })
-        console.log(this.state.books)
       } catch (err) {
         console.log(err, 'Error');
       }
@@ -96,7 +103,12 @@ class BestBooks extends React.Component {
             <h3>{book.title}</h3>
             <p>{book.description}</p>
             <p>{book.genre}</p>
+            <Button 
+            onClick={() => this.deleteBook(book._id)} variant="danger">
+            Delete
+        </Button>
           </Carousel.Caption>
+          {/* <Button>Delete</Button> */}
         </Carousel.Item>
         
       )
@@ -105,7 +117,9 @@ class BestBooks extends React.Component {
     return (
       <>
         <h2>My Essential Lifelong Learning &amp; Formation Shelf</h2>
-
+        <Button onClick={this.handleOnShowModal} variant='primary' type='submit'>
+          Add Book
+        </Button>
         {this.state.books.length ? (
           <Carousel>
             {books}
@@ -113,6 +127,12 @@ class BestBooks extends React.Component {
         ) : (
           <h3>No Books Found :(</h3>
         )}
+  <BookFormModal 
+         showModal={this.state.showModal}
+         onHide={this.handleOnHide}
+         postBooks={this.postBooks}
+
+  />
       </>
     )
   }

@@ -2,51 +2,42 @@ import React from 'react';
 import Image from 'react-bootstrap/Image';
 import Modal from 'react-bootstrap/Modal';
 import { Form, Button, Container } from 'react-bootstrap';
-import BestBooks from './BestBooks';
+// import BestBooks from './BestBooks';
 
 
 class BookFormModal extends React.Component {
 
-  handleOnHide = () => {
-    this.setState({
-      showModal: false
-    });
-  };
-
-  handleOnHide = () => {
-    this.setState({
-      showModal: false
-    });
-  };
-
-  handleOnShowModal = (book) => {
-    this.setState({
-      showModal: true,
-      selectedBook: book
-    });
-  };
+  handleBookSubmit = (e) => {
+    e.preventDefault();
+    let newBook = {
+      title: e.target.title.value,
+      description: e.target.description.value,
+      status: e.target.status
+    } 
+    this.props.postBooks(newBook)
+  }
 
   render() {
     return (
       <>
-        <Button onClick={this.state.handleShowModal} variant='primary' type='submit'>
-          Add Book
-        </Button>
-        
+      <h1>Book for modal{this.props.testValue}</h1>
         <Modal
           show={this.props.showModal}
-          onHide={this.props.onHide}>
+          onSubmit={this.props.handleOnShowModal}
+          onHide={this.props.handleOnHide}>
           <Modal.Header closeButton>
-            {this.props.selectedBook.title}
+           
           </Modal.Header>
-          <Image src={this.props.selectedBook.image_url} alt={this.props.selectedBook.title} />
+          {/* <Image src={this.props.selectedBook.image_url} alt={this.props.selectedBook.title} /> */}
           <Modal.Body>
-            <Form onSubmit={this.handleOnShowModal}>
-              <Form.Group className='mb-3' controlId='formBasicEmail'>
+            <Form onSubmit={this.handleBookSubmit}>
+              <Form.Group className='mb-3' controlId='title'>
                 <Form.Label>Book Title</Form.Label>
                 <Form.Control name="title" type='bookTitle' placeholder='Book Title' />
                 <Form.Label>Book Description</Form.Label>
-                <Form.Control name="description" type='bookDescription' placeholder='Book Description' />
+                <Form.Control name="description" type='description' placeholder='Book Description' />
+                <Form.Label>Book Value</Form.Label>
+                <Form.Control name="value" type='description' placeholder='Book Value' />
                 <Button variant="primary" type="submit">
                   Add Book
                 </Button>
